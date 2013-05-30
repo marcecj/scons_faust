@@ -31,7 +31,15 @@ selection method.
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
+import os
 import SCons.Errors
+
+def _gen_faust_architecture(target, source, env, for_signature):
+
+    has_ext   = os.path.splitext(env['FAUST_ARCHITECTURE'])[1] != ''
+    arch_file = env['FAUST_ARCHITECTURE'] + ('' if has_ext else '.cpp')
+
+    return arch_file
 
 def _get_prog_path(env, key, name):
     """Try to find the executable 'name' and store its location in env[key]."""
@@ -67,6 +75,9 @@ def generate(env):
     env['FAUST2SC']                 = _get_prog_path(env, 'FAUST_FAUST2C', 'faust2c')
     env['FAUST2SC_PREFIX']          = ''
     env['FAUST2SC_HASKELL_MODULE']  = ''
+
+    # private variables
+    env['FAUST_GET_ARCH']           = _gen_faust_architecture
 
 def exists(env):
     # expect faust2sc to be there if faust is

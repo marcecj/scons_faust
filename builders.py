@@ -24,7 +24,7 @@ def dsp_source_scanner(node, env, path):
 def dsp_target_scanner(node, env, path):
     """Search for architecture file in `path'."""
 
-    arch = env['FAUST_ARCHITECTURE'] + '.cpp'
+    arch = env.subst('${FAUST_GET_ARCH}')
     return filter(os.path.exists, [os.path.join(str(d), arch) for d in path])
 
 def svg_emitter(target, source, env):
@@ -48,7 +48,7 @@ dsp_tgt_scanner = SCons.Scanner.Scanner(
 )
 
 dsp = SCons.Builder.Builder(
-        action = '$FAUST_FAUST ${FAUST_FLAGS} -a ${FAUST_ARCHITECTURE}.cpp -o $TARGET $SOURCE',
+        action = '$FAUST_FAUST ${FAUST_FLAGS} -a ${FAUST_GET_ARCH} -o $TARGET $SOURCE',
         suffix = '.cpp',
         src_suffix = '.dsp',
         source_scanner = dsp_src_scanner,
