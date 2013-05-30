@@ -68,16 +68,23 @@ def generate(env):
                             'FaustSC'       : builders.sc,
                             'FaustHaskell'  : builders.hs })
 
-    env['FAUST_FAUST']              = _get_prog_path(env, 'FAUST_FAUST', 'faust')
-    env['FAUST_ARCHITECTURE']       = 'module'
-    env['FAUST_FLAGS']              = []
-    env['FAUST_PATH']               = ['.', '/usr/local/lib/faust', '/usr/lib/faust']
-    env['FAUST2SC']                 = _get_prog_path(env, 'FAUST_FAUST2C', 'faust2c')
-    env['FAUST2SC_PREFIX']          = ''
-    env['FAUST2SC_HASKELL_MODULE']  = ''
+    env.SetDefault(
+        # set faust defaults
+        FAUST_FAUST              = _get_prog_path(env, 'FAUST_FAUST', 'faust'),
+        FAUST_ARCHITECTURE       = 'module',
+        FAUST_FLAGS              = SCons.Util.CLVar(''),
+        FAUST_PATH               = SCons.Util.CLVar(
+            ['.', '/usr/local/lib/faust', '/usr/lib/faust']
+        ),
 
-    # private variables
-    env['FAUST_GET_ARCH']           = _gen_faust_architecture
+        # set faust2c defaults
+        FAUST2SC                 = _get_prog_path(env, 'FAUST2C', 'faust2sc'),
+        FAUST2SC_PREFIX          = '',
+        FAUST2SC_HASKELL_MODULE  = '',
+
+        # private variables
+        FAUST_GET_ARCH           = _gen_faust_architecture
+    )
 
 def exists(env):
     # expect faust2sc to be there if faust is
