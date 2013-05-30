@@ -52,13 +52,13 @@ def _get_prog_path(env, key, name):
 
 def generate(env):
 
-    from builders import *
+    from . import builders
 
-    env.Append(BUILDERS = { 'Faust'         : dsp,
-                            'FaustXML'      : xml,
-                            'FaustSVG'      : svg,
-                            'FaustSC'       : sc,
-                            'FaustHaskell'  : hs })
+    env.Append(BUILDERS = { 'Faust'         : builders.dsp,
+                            'FaustXML'      : builders.xml,
+                            'FaustSVG'      : builders.svg,
+                            'FaustSC'       : builders.sc,
+                            'FaustHaskell'  : builders.hs })
 
     env['FAUST_FAUST']              = _get_prog_path(env, 'FAUST_FAUST', 'faust')
     env['FAUST_ARCHITECTURE']       = 'module'
