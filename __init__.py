@@ -70,7 +70,7 @@ def generate(env):
                             'FaustHaskell'  : builders.hs })
 
     faust_faust = _get_prog_path(env, 'FAUST_FAUST', 'faust')
-    faust2sc    = _get_prog_path(env, 'FAUST2C', 'faust2sc')
+    faust2sc    = _get_prog_path(env, 'FAUST2SC_FAUST2SC', 'faust2sc')
 
     try:
         faust_proc = subp.Popen([faust_faust, '--version'], stdout=subp.PIPE)
@@ -98,7 +98,7 @@ def generate(env):
         ),
 
         # set faust2c defaults
-        FAUST2SC                 = faust2sc,
+        FAUST2SC_FAUST2SC         = faust2sc,
         FAUST2SC_VERSION         = faust2sc_ver,
         FAUST2SC_PREFIX          = '',
         FAUST2SC_HASKELL_MODULE  = '',

@@ -75,7 +75,7 @@ svg = SCons.Builder.Builder(
 )
 
 sc  = SCons.Builder.Builder(
-        action = '$FAUST2SC --lang=sclang --prefix="${FAUST2SC_PREFIX}" -o $TARGET $SOURCES',
+        action = '$FAUST2SC_FAUST2SC --lang=sclang --prefix="${FAUST2SC_PREFIX}" -o $TARGET $SOURCES',
         suffix = '.sc',
         src_suffix = '.dsp.xml',
         source_scanner = dsp_src_scanner,
@@ -83,7 +83,7 @@ sc  = SCons.Builder.Builder(
 )
 
 hs  = SCons.Builder.Builder(
-        action = '$FAUST2SC --lang=haskell --prefix="${FAUST2SC_HASKELL_MODULE}" -o $TARGET $SOURCES',
+        action = '$FAUST2SC_FAUST2SC --lang=haskell --prefix="${FAUST2SC_HASKELL_MODULE}" -o $TARGET $SOURCES',
         suffix = '.hs',
         src_suffix = '.dsp.xml',
         source_scanner = dsp_src_scanner,
