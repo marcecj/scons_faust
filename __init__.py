@@ -60,6 +60,7 @@ def _get_prog_path(env, key, name):
 
 def generate(env):
 
+    import subprocess as subp
     from . import builders
 
     env.Append(BUILDERS = { 'Faust'         : builders.dsp,
@@ -68,9 +69,28 @@ def generate(env):
                             'FaustSC'       : builders.sc,
                             'FaustHaskell'  : builders.hs })
 
+    faust_faust = _get_prog_path(env, 'FAUST_FAUST', 'faust')
+    faust2sc    = _get_prog_path(env, 'FAUST2C', 'faust2sc')
+
+    try:
+        faust_proc = subp.Popen([faust_faust, '--version'], stdout=subp.PIPE)
+        faust_ver = faust_proc.communicate()[0].splitlines()[0].split()[-1]
+    except Exception as e:
+        print("Error getting faust version: " + str(e))
+        faust_ver = ''
+
+    try:
+        faust2sc_proc = subp.Popen([faust2sc, '--version'], stdout=subp.PIPE)
+        faust2sc_ver = faust2sc_proc.communicate()[0].split()[-1]
+    except Exception as e:
+        print("Error getting faust2sc version: " + str(e))
+        faust2sc_ver = ''
+
+
     env.SetDefault(
         # set faust defaults
-        FAUST_FAUST              = _get_prog_path(env, 'FAUST_FAUST', 'faust'),
+        FAUST_FAUST              = faust_faust,
+        FAUST_VERSION            = faust_ver,
         FAUST_ARCHITECTURE       = 'module',
         FAUST_FLAGS              = SCons.Util.CLVar(''),
         FAUST_PATH               = SCons.Util.CLVar(
@@ -78,7 +98,8 @@ def generate(env):
         ),
 
         # set faust2c defaults
-        FAUST2SC                 = _get_prog_path(env, 'FAUST2C', 'faust2sc'),
+        FAUST2SC                 = faust2sc,
+        FAUST2SC_VERSION         = faust2sc_ver,
         FAUST2SC_PREFIX          = '',
         FAUST2SC_HASKELL_MODULE  = '',
 
