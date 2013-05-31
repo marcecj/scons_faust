@@ -29,7 +29,7 @@ def dsp_target_scanner(node, env, path):
 
 def svg_emitter(target, source, env):
     target = target + [os.path.join(str(t), 'process.svg') for t in target]
-    print map(str, target)
+    print(map(str, target))
     return (target, source)
     #return (target + [os.path.join(str(target[0]), 'process.svg')], source)
 
