@@ -48,9 +48,24 @@ dsp_tgt_scanner = SCons.Scanner.Scanner(
     path_function = SCons.Scanner.FindPathDirs('FAUST_PATH')
 )
 
+faust_lang_suffix_map = {
+    "cpp":  ".cpp",
+    "c":    ".c",
+    "java": ".jar",
+    "js":   ".js",
+    "llvm": ".ll",
+    "fir":  ".fir", # TODO: not sure about this
+}
+
+faust_action = '$FAUST_FAUST \
+${FAUST_FLAGS} \
+${FAUST_VERSION >= "2" and "-lang $FAUST_LANG" or ""} \
+-a ${FAUST_GET_ARCH} \
+-o $TARGET $SOURCE'
+
 dsp = SCons.Builder.Builder(
-        action = '$FAUST_FAUST ${FAUST_FLAGS} -a ${FAUST_GET_ARCH} -o $TARGET $SOURCE',
-        suffix = '.cpp',
+        action = faust_action,
+        suffix = lambda env,srcs: faust_lang_suffix_map[env['FAUST_LANG']],
         src_suffix = '.dsp',
         source_scanner = dsp_src_scanner,
         target_scanner = dsp_tgt_scanner

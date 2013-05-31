@@ -67,6 +67,7 @@ def generate(env):
         # set faust defaults
         FAUST_FAUST              = faust_faust,
         FAUST_VERSION            = faust_ver,
+        FAUST_LANG               = 'cpp',
         FAUST_ARCHITECTURE       = 'module',
         FAUST_FLAGS              = SCons.Util.CLVar(''),
         FAUST_PATH               = SCons.Util.CLVar(
