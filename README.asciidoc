@@ -1,0 +1,73 @@
+An SCons Tool for FAUST
+=======================
+Marc Joliet <marcec@gmx.de>
+
+Introduction
+------------
+
+This is an SCons tool for compiling FAUST programs.  It adds various builders to
+your construction environment: `Faust`, `FaustXML`, `FaustSVG`, `FaustSC`, and
+`FaustHaskell`.  Their behaviour can be modified by changing various
+construction variables (see "Usage" below).
+
+This tool is based on a FAUST tool I found
+https://github.com/kaoskorobase/skUG/blob/master/site_scons/site_tools/faust.py[here],
+but has been heavily modified to behave more nicely and to also work with
+FAUST2 (e.g., don't force architecture files to end with ".cpp").
+
+Installation
+------------
+
+The SCons FAUST tool depends on the obvious:
+
+- Python (2.5 or newer)
+- SCons
+- FAUST (along with all the dependencies of architecture files you use)
+
+If your project uses git, you might consider adding this repository as a git
+submodule in the `site_scons/site_tools` directory in `faust`.  Otherwise, you
+can copy the repository into your projects `site_scons/site_tools` directory
+into a subdirectory named `faust`.  Alternatively, you could clone the
+repository into `$HOME/.scons/site_scons/site_tools`, again, into a subdirectory
+named `faust`.
+
+Usage
+-----
+
+Use this as you would any other SCons tool: add it to the `tools` argument of
+Environment(), for example:
+
+--------------------------------------------------
+env = Environment(tools = ['default', 'faust'])
+--------------------------------------------------
+
+If any of `faust` or `faust2sc` are not found, an exception is raised.
+
+To compile a FAUST DSP, you use the `Faust()` builder:
+
+-----------------------------------
+dsp = env.Faust(['some_dsp.dsp'])
+-----------------------------------
+
+To manipulate the behaviour of the builders, you can specify the following
+construction variables (variables for internal use are not listed here):
+
+[options="autowidth,header"]
+|===============================================================
+|Variable name          | Function
+|`FAUST_FAUST`          | The name of the `faust` executable.
+|`FAUST_ARCHITECTURE`   | The architecture file to compile with.
+|`FAUST_FLAGS`          | Miscellaneous flags passed to `faust` and `faust2sc`.
+|`FAUST_PATH`           | The FAUST library search path.
+|`FAUST2SC_FAUST2SC`    | The name of the `faust2sc` executable.
+|`FAUST2SC_PREFIX`      | The class or module prefix (FaustSC)
+|`FAUST2SC_HASKELL_MODULE` | The class or module prefix (FaustHaskell).
+|===============================================================
+
+Furthermore, you can inspect the version of `faust` and `faust2sc` with the
+construction variables `FAUST_VERSION` and `FAUST2SC_VERSION`.
+
+License
+-------
+
+See the file LICENSE.
