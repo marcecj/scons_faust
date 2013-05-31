@@ -59,43 +59,43 @@ ${FAUST_VERSION >= "2" and "-lang $FAUST_LANG" or ""} \
 -o $TARGET $SOURCE'
 
 dsp = SCons.Builder.Builder(
-        action = faust_action,
-        suffix = lambda env,srcs: faust_lang_suffix_map[env['FAUST_LANG']],
-        src_suffix = '.dsp',
-        source_scanner = dsp_src_scanner,
-        target_scanner = dsp_tgt_scanner
+    action = faust_action,
+    suffix = lambda env,srcs: faust_lang_suffix_map[env['FAUST_LANG']],
+    src_suffix = '.dsp',
+    source_scanner = dsp_src_scanner,
+    target_scanner = dsp_tgt_scanner
 )
 
 xml = SCons.Builder.Builder(
-        action = ['$FAUST_FAUST ${FAUST_FLAGS} -o /dev/null -xml $SOURCE',
-                  SCons.Script.Move('$TARGET', '${SOURCE}.xml')],
-        suffix = '.dsp.xml',
-        src_suffix = '.dsp',
-        source_scanner = dsp_src_scanner
+    action = ['$FAUST_FAUST ${FAUST_FLAGS} -o /dev/null -xml $SOURCE',
+              SCons.Script.Move('$TARGET', '${SOURCE}.xml')],
+    suffix = '.dsp.xml',
+    src_suffix = '.dsp',
+    source_scanner = dsp_src_scanner
 )
 
 svg = SCons.Builder.Builder(
-        action = ['$FAUST_FAUST ${FAUST_FLAGS} -o /dev/null -svg $SOURCE',
-                  SCons.Script.Move('$TARGET', '${SOURCE.filebase}-svg')],
-        suffix = '.dsp-svg',
-        src_suffix = '.dsp',
-        single_source = True,
-        source_scanner = dsp_src_scanner,
-        target_factory = SCons.Script.Dir
+    action = ['$FAUST_FAUST ${FAUST_FLAGS} -o /dev/null -svg $SOURCE',
+              SCons.Script.Move('$TARGET', '${SOURCE.filebase}-svg')],
+    suffix = '.dsp-svg',
+    src_suffix = '.dsp',
+    single_source = True,
+    source_scanner = dsp_src_scanner,
+    target_factory = SCons.Script.Dir
 )
 
 sc  = SCons.Builder.Builder(
-        action = '$FAUST2SC_FAUST2SC --lang=sclang --prefix="${FAUST2SC_PREFIX}" -o $TARGET $SOURCES',
-        suffix = '.sc',
-        src_suffix = '.dsp.xml',
-        source_scanner = dsp_src_scanner,
-        multi = True
+    action = '$FAUST2SC_FAUST2SC --lang=sclang --prefix="${FAUST2SC_PREFIX}" -o $TARGET $SOURCES',
+    suffix = '.sc',
+    src_suffix = '.dsp.xml',
+    source_scanner = dsp_src_scanner,
+    multi = True
 )
 
 hs  = SCons.Builder.Builder(
-        action = '$FAUST2SC_FAUST2SC --lang=haskell --prefix="${FAUST2SC_HASKELL_MODULE}" -o $TARGET $SOURCES',
-        suffix = '.hs',
-        src_suffix = '.dsp.xml',
-        source_scanner = dsp_src_scanner,
-        multi = True
+    action = '$FAUST2SC_FAUST2SC --lang=haskell --prefix="${FAUST2SC_HASKELL_MODULE}" -o $TARGET $SOURCES',
+    suffix = '.hs',
+    src_suffix = '.dsp.xml',
+    source_scanner = dsp_src_scanner,
+    multi = True
 )
