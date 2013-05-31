@@ -32,10 +32,6 @@ def svg_emitter(target, source, env):
     return (target, source)
     #return (target + [os.path.join(str(target[0]), 'process.svg')], source)
 
-# TODO: why does this not work?
-def svg_scanner(node, env, path):
-    return [os.path.join(str(node), 'process.svg')]
-
 dsp_src_scanner = SCons.Scanner.Scanner(
     function = dsp_source_scanner,
     recursive = True,
@@ -86,7 +82,6 @@ svg = SCons.Builder.Builder(
         single_source = True,
         source_scanner = dsp_src_scanner,
         target_factory = SCons.Script.Dir
-        # target_scanner = SCons.Scanner.Scanner(function = svg_scanner)
 )
 
 sc  = SCons.Builder.Builder(
