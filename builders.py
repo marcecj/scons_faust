@@ -33,6 +33,7 @@ def svg_emitter(target, source, env):
     return (target, source)
     #return (target + [os.path.join(str(target[0]), 'process.svg')], source)
 
+# TODO: why does this not work?
 def svg_scanner(node, env, path):
     return [os.path.join(str(node), 'process.svg')]
 
@@ -65,13 +66,13 @@ xml = SCons.Builder.Builder(
 
 svg = SCons.Builder.Builder(
         action = ['$FAUST_FAUST ${FAUST_FLAGS} -o /dev/null -svg $SOURCE',
-                  SCons.Defaults.Move('$TARGET', '${SOURCE}-svg')],
+                  SCons.Defaults.Move('$TARGET', '${SOURCE.filebase}-svg')],
         suffix = '.dsp-svg',
         src_suffix = '.dsp',
         single_source = True,
         source_scanner = dsp_src_scanner,
-        target_factory = SCons.Script.Dir,
-        target_scanner = SCons.Scanner.Scanner(function = svg_scanner)
+        target_factory = SCons.Script.Dir
+        # target_scanner = SCons.Scanner.Scanner(function = svg_scanner)
 )
 
 sc  = SCons.Builder.Builder(
