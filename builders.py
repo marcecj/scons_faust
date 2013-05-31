@@ -2,7 +2,6 @@ import os
 import re
 
 import SCons.Builder
-import SCons.Defaults
 import SCons.Scanner
 import SCons.Script
 
@@ -73,7 +72,7 @@ dsp = SCons.Builder.Builder(
 
 xml = SCons.Builder.Builder(
         action = ['$FAUST_FAUST ${FAUST_FLAGS} -o /dev/null -xml $SOURCE',
-                  SCons.Defaults.Move('$TARGET', '${SOURCE}.xml')],
+                  SCons.Script.Move('$TARGET', '${SOURCE}.xml')],
         suffix = '.dsp.xml',
         src_suffix = '.dsp',
         source_scanner = dsp_src_scanner
@@ -81,7 +80,7 @@ xml = SCons.Builder.Builder(
 
 svg = SCons.Builder.Builder(
         action = ['$FAUST_FAUST ${FAUST_FLAGS} -o /dev/null -svg $SOURCE',
-                  SCons.Defaults.Move('$TARGET', '${SOURCE.filebase}-svg')],
+                  SCons.Script.Move('$TARGET', '${SOURCE.filebase}-svg')],
         suffix = '.dsp-svg',
         src_suffix = '.dsp',
         single_source = True,
