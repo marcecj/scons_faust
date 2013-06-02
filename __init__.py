@@ -11,11 +11,21 @@ import os
 import SCons.Errors
 
 def _gen_faust_architecture(target, source, env, for_signature):
+    """
+    Generate a valid FAUST architecture file name from FAUST_ARCHITECTURE and
+    FAUST_LANG.
+    """
 
-    has_ext   = os.path.splitext(env['FAUST_ARCHITECTURE'])[1] != ''
-    arch_file = env['FAUST_ARCHITECTURE'] + ('' if has_ext else '.cpp')
+    from . builders import faust_lang_suffix_map
 
-    return arch_file
+    arch_fname, ext = os.path.splitext(env['FAUST_ARCHITECTURE'])
+
+    # if the architecture file was specified without a suffix, default to the
+    # suffix corresponding to the selected $FAUST_LANG
+    if ext == '':
+        ext = faust_lang_suffix_map[env['FAUST_LANG']]
+
+    return arch_fname + ext
 
 def _get_prog_path(env, key, name):
     """Try to find the executable 'name' and store its location in env[key]."""
