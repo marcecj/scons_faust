@@ -10,6 +10,7 @@ selection method.
 
 #
 # Copyright (c) 2008 Stefan Kersten
+# Copyright (c) 2013 Marc Joliet
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
