@@ -56,6 +56,7 @@ construction variables (variables for internal use are not listed here):
 |===============================================================
 |Variable name          | Function
 |`FAUST_FAUST`          | The name of the `faust` executable.
+|`FAUST_LANG`           | The FAUST backend (e.g., "cpp").
 |`FAUST_ARCHITECTURE`   | The architecture file to compile with.
 |`FAUST_FLAGS`          | Miscellaneous flags passed to `faust` and `faust2sc`.
 |`FAUST_PATH`           | The FAUST library search path.
