@@ -69,8 +69,7 @@ dsp = SCons.Builder.Builder(
 ###################
 
 xml = SCons.Builder.Builder(
-    action = ['$FAUST_FAUST ${FAUST_FLAGS} -o /dev/null -xml $SOURCE',
-              SCons.Script.Move('$TARGET', '${SOURCE}.xml')],
+    action = '$FAUST_FAUST ${FAUST_FLAGS} -o /dev/null -xml $SOURCE',
     suffix = '.dsp.xml',
     src_suffix = '.dsp',
     source_scanner = dsp_src_scanner
@@ -87,9 +86,8 @@ def svg_emitter(target, source, env):
     return (target, source)
 
 svg = SCons.Builder.Builder(
-    action = ['$FAUST_FAUST ${FAUST_FLAGS} -o /dev/null -svg $SOURCE',
-              SCons.Script.Move('$TARGET', '${SOURCE.filebase}-svg')],
-    suffix = '.dsp-svg',
+    action = '$FAUST_FAUST ${FAUST_FLAGS} -o /dev/null -svg $SOURCE',
+    suffix = lambda env,srcs: "-svg",
     src_suffix = '.dsp',
     single_source = True,
     source_scanner = dsp_src_scanner,
