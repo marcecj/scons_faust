@@ -37,13 +37,16 @@ def svg_emitter(target, source, env):
 def svg_scanner(node, env, path):
     return [os.path.join(str(node), 'process.svg')]
 
+dsp_tgt_scanner = SCons.Scanner.Scanner(
+    function = dsp_target_scanner,
+    path_function = SCons.Scanner.FindPathDirs('FAUST_PATH')
+)
+
 dsp = SCons.Builder.Builder(
         action = 'faust ${FAUST_FLAGS} -a ${FAUST_ARCHITECTURE}.cpp -o $TARGET $SOURCE',
         suffix = '.cpp',
         src_suffix = '.dsp',
-        target_scanner = Scons.Scanner.Scanner(
-            function = dsp_target_scanner,
-            path_function = SCons.Scanner.FindPathDirs('FAUST_PATH'))
+        target_scanner = dsp_tgt_scanner
 )
 
 xml = SCons.Builder.Builder(
