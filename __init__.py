@@ -31,6 +31,25 @@ selection method.
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
+import SCons.Errors
+
+def _get_prog_path(env, key, name):
+    """Try to find the executable 'name' and store its location in env[key]."""
+
+    # check if the user already specified the location
+    try:
+        return env[key]
+    except KeyError:
+        pass
+
+    # on windows faust might be named faust.exe
+    prog_path = env.WhereIs(name) or env.WhereIs(name+'.exe')
+
+    if not prog_path:
+        raise SCons.Errors.EnvironmentError("faust not found")
+
+    return prog_path
+
 def generate(env):
 
     from builders import *
@@ -41,12 +60,14 @@ def generate(env):
                             'FaustSC'       : sc,
                             'FaustHaskell'  : hs })
 
+    env['FAUST_FAUST']              = _get_prog_path(env, 'FAUST_FAUST', 'faust')
     env['FAUST_ARCHITECTURE']       = 'module'
     env['FAUST_FLAGS']              = []
     env['FAUST_PATH']               = ['.', '/usr/local/lib/faust', '/usr/lib/faust']
-    env['FAUST2SC']                 = 'faust2sc'
+    env['FAUST2SC']                 = _get_prog_path(env, 'FAUST_FAUST2C', 'faust2c')
     env['FAUST2SC_PREFIX']          = ''
     env['FAUST2SC_HASKELL_MODULE']  = ''
 
 def exists(env):
-    return (env.WhereIs(FAUST) or SCons.Util.WhereIs(FAUST))
+    # expect faust2sc to be there if faust is
+    return _get_prog_path(env, 'FAUST_FAUST', 'faust')

@@ -6,7 +6,6 @@ import SCons.Defaults
 import SCons.Scanner
 import SCons.Script
 
-FAUST = 'faust'
 INCLUDE_RE = re.compile(r'import\s*\(\s*"([^"]+)"\s*\)\s*;', re.M)
 
 def dsp_source_scanner(node, env, path):
@@ -49,7 +48,7 @@ dsp_tgt_scanner = SCons.Scanner.Scanner(
 )
 
 dsp = SCons.Builder.Builder(
-        action = 'faust ${FAUST_FLAGS} -a ${FAUST_ARCHITECTURE}.cpp -o $TARGET $SOURCE',
+        action = '$FAUST_FAUST ${FAUST_FLAGS} -a ${FAUST_ARCHITECTURE}.cpp -o $TARGET $SOURCE',
         suffix = '.cpp',
         src_suffix = '.dsp',
         source_scanner = dsp_src_scanner,
@@ -57,14 +56,14 @@ dsp = SCons.Builder.Builder(
 )
 
 xml = SCons.Builder.Builder(
-        action = ['faust ${FAUST_FLAGS} -o /dev/null -xml $SOURCE', SCons.Defaults.Move('$TARGET', '${SOURCE}.xml')],
+        action = ['$FAUST_FAUST ${FAUST_FLAGS} -o /dev/null -xml $SOURCE', SCons.Defaults.Move('$TARGET', '${SOURCE}.xml')],
         suffix = '.dsp.xml',
         src_suffix = '.dsp',
         source_scanner = dsp_src_scanner
 )
 
 svg = SCons.Builder.Builder(
-        action = ['faust ${FAUST_FLAGS} -o /dev/null -svg $SOURCE', SCons.Defaults.Move('$TARGET', '${SOURCE}-svg')],
+        action = ['$FAUST_FAUST ${FAUST_FLAGS} -o /dev/null -svg $SOURCE', SCons.Defaults.Move('$TARGET', '${SOURCE}-svg')],
         suffix = '.dsp-svg',
         src_suffix = '.dsp',
         single_source = True,
