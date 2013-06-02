@@ -40,7 +40,7 @@ def generate(env):
     from . import builders
     from . import pseudo_builders
 
-    env.Append(BUILDERS = { 'Faust':        builders.dsp,
+    env.Append(BUILDERS = { 'Faust':        pseudo_builders.dsp_builder,
                             'FaustXML':     builders.xml,
                             'FaustSVG':     pseudo_builders.svg_builder,
                             'FaustSC':      builders.sc,

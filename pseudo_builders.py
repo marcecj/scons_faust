@@ -17,3 +17,19 @@ def svg_builder(env, target, source, *args, **kwargs):
         env.Clean(t, t.path)
 
     return r
+
+def dsp_builder(env, target, source, *args, **kwargs):
+    """
+    A pseudo builder for compiling FAUST DSPs.
+
+    In addition to what the DSP builder does, this pseudo-builder checks the
+    FAUST version and raises an error when FAUST_LANG is not "cpp" and
+    FAUST_VERSION is lower than 2.
+    """
+
+    if env['FAUST_VERSION'] < "2" and env['FAUST_LANG'] != "cpp":
+        raise SCons.Errors.UserError(
+            "FAUST 1 does not support languages other than C++."
+        )
+
+    return builders.dsp(env, target, source, *args, **kwargs)
