@@ -1,0 +1,8 @@
+# backup files
+*~
+
+# compiled python files
+*.py[oc]
+
+# vim swap files
+*.swp
