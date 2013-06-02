@@ -72,6 +72,7 @@ xml = SCons.Builder.Builder(
     action = '$FAUST_FAUST ${FAUST_FLAGS} -o /dev/null -xml $SOURCE',
     suffix = '.dsp.xml',
     src_suffix = '.dsp',
+    single_source = True,
     source_scanner = dsp_src_scanner
 )
 
