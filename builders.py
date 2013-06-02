@@ -79,12 +79,6 @@ xml = SCons.Builder.Builder(
 # the SVG builder #
 ###################
 
-def svg_emitter(target, source, env):
-
-    target = env.Dir(target) # + [os.path.join(str(t), 'process.svg') for t in target]
-
-    return (target, source)
-
 svg = SCons.Builder.Builder(
     action = '$FAUST_FAUST ${FAUST_FLAGS} -o /dev/null -svg $SOURCE',
     suffix = lambda env,srcs: "-svg",

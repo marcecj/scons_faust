@@ -38,10 +38,11 @@ def generate(env):
 
     import subprocess as subp
     from . import builders
+    from . import pseudo_builders
 
     env.Append(BUILDERS = { 'Faust':        builders.dsp,
                             'FaustXML':     builders.xml,
-                            'FaustSVG':     builders.svg,
+                            'FaustSVG':     pseudo_builders.svg_builder,
                             'FaustSC':      builders.sc,
                             'FaustHaskell': builders.hs })
 
