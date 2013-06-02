@@ -37,6 +37,12 @@ def svg_emitter(target, source, env):
 def svg_scanner(node, env, path):
     return [os.path.join(str(node), 'process.svg')]
 
+dsp_src_scanner = SCons.Scanner.Scanner(
+    function = dsp_source_scanner,
+    recursive = True,
+    path_function = SCons.Scanner.FindPathDirs('FAUST_PATH')
+)
+
 dsp_tgt_scanner = SCons.Scanner.Scanner(
     function = dsp_target_scanner,
     path_function = SCons.Scanner.FindPathDirs('FAUST_PATH')
@@ -46,13 +52,15 @@ dsp = SCons.Builder.Builder(
         action = 'faust ${FAUST_FLAGS} -a ${FAUST_ARCHITECTURE}.cpp -o $TARGET $SOURCE',
         suffix = '.cpp',
         src_suffix = '.dsp',
+        source_scanner = dsp_src_scanner,
         target_scanner = dsp_tgt_scanner
 )
 
 xml = SCons.Builder.Builder(
         action = ['faust ${FAUST_FLAGS} -o /dev/null -xml $SOURCE', SCons.Defaults.Move('$TARGET', '${SOURCE}.xml')],
         suffix = '.dsp.xml',
-        src_suffix = '.dsp'
+        src_suffix = '.dsp',
+        source_scanner = dsp_src_scanner
 )
 
 svg = SCons.Builder.Builder(
@@ -60,6 +68,7 @@ svg = SCons.Builder.Builder(
         suffix = '.dsp-svg',
         src_suffix = '.dsp',
         single_source = True,
+        source_scanner = dsp_src_scanner,
         target_factory = SCons.Script.Dir,
         target_scanner = SCons.Scanner.Scanner(function = svg_scanner)
 )
@@ -68,6 +77,7 @@ sc  = SCons.Builder.Builder(
         action = '$FAUST2SC --lang=sclang --prefix="${FAUST2SC_PREFIX}" -o $TARGET $SOURCES',
         suffix = '.sc',
         src_suffix = '.dsp.xml',
+        source_scanner = dsp_src_scanner,
         multi = True
 )
 
@@ -75,5 +85,6 @@ hs  = SCons.Builder.Builder(
         action = '$FAUST2SC --lang=haskell --prefix="${FAUST2SC_HASKELL_MODULE}" -o $TARGET $SOURCES',
         suffix = '.hs',
         src_suffix = '.dsp.xml',
+        source_scanner = dsp_src_scanner,
         multi = True
 )

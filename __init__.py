@@ -48,11 +48,5 @@ def generate(env):
     env['FAUST2SC_PREFIX']          = ''
     env['FAUST2SC_HASKELL_MODULE']  = ''
 
-    env.Append(SCANNERS = [
-        env.Scanner(function = dsp_source_scanner,
-                    skeys = ['.dsp'],
-                    path_function = SCons.Scanner.FindPathDirs('FAUST_PATH'))
-        ])
-
 def exists(env):
     return (env.WhereIs(FAUST) or SCons.Util.WhereIs(FAUST))
