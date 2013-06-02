@@ -39,11 +39,11 @@ def generate(env):
     import subprocess as subp
     from . import builders
 
-    env.Append(BUILDERS = { 'Faust'         : builders.dsp,
-                            'FaustXML'      : builders.xml,
-                            'FaustSVG'      : builders.svg,
-                            'FaustSC'       : builders.sc,
-                            'FaustHaskell'  : builders.hs })
+    env.Append(BUILDERS = { 'Faust':        builders.dsp,
+                            'FaustXML':     builders.xml,
+                            'FaustSVG':     builders.svg,
+                            'FaustSC':      builders.sc,
+                            'FaustHaskell': builders.hs })
 
     faust_faust = _get_prog_path(env, 'FAUST_FAUST', 'faust')
     faust2sc    = _get_prog_path(env, 'FAUST2SC_FAUST2SC', 'faust2sc')
