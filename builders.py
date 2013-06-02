@@ -5,6 +5,10 @@ import SCons.Builder
 import SCons.Scanner
 import SCons.Script
 
+###################
+# the DSP builder #
+###################
+
 INCLUDE_RE = re.compile(r'import\s*\(\s*"([^"]+)"\s*\)\s*;', re.M)
 
 def dsp_source_scanner(node, env, path):
@@ -25,12 +29,6 @@ def dsp_target_scanner(node, env, path):
 
     arch = env.subst('${FAUST_GET_ARCH}')
     return filter(os.path.exists, [os.path.join(str(d), arch) for d in path])
-
-def svg_emitter(target, source, env):
-    target = target + [os.path.join(str(t), 'process.svg') for t in target]
-    print(map(str, target))
-    return (target, source)
-    #return (target + [os.path.join(str(target[0]), 'process.svg')], source)
 
 dsp_src_scanner = SCons.Scanner.Scanner(
     function = dsp_source_scanner,
@@ -66,6 +64,10 @@ dsp = SCons.Builder.Builder(
     target_scanner = dsp_tgt_scanner
 )
 
+###################
+# the XML builder #
+###################
+
 xml = SCons.Builder.Builder(
     action = ['$FAUST_FAUST ${FAUST_FLAGS} -o /dev/null -xml $SOURCE',
               SCons.Script.Move('$TARGET', '${SOURCE}.xml')],
@@ -73,6 +75,16 @@ xml = SCons.Builder.Builder(
     src_suffix = '.dsp',
     source_scanner = dsp_src_scanner
 )
+
+###################
+# the SVG builder #
+###################
+
+def svg_emitter(target, source, env):
+
+    target = env.Dir(target) # + [os.path.join(str(t), 'process.svg') for t in target]
+
+    return (target, source)
 
 svg = SCons.Builder.Builder(
     action = ['$FAUST_FAUST ${FAUST_FLAGS} -o /dev/null -svg $SOURCE',
@@ -83,6 +95,10 @@ svg = SCons.Builder.Builder(
     source_scanner = dsp_src_scanner,
     target_factory = SCons.Script.Dir
 )
+
+##############################
+# the supercollider builders #
+##############################
 
 sc  = SCons.Builder.Builder(
     action = '$FAUST2SC_FAUST2SC --lang=sclang --prefix="${FAUST2SC_PREFIX}" -o $TARGET $SOURCES',
