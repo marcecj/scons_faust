@@ -33,16 +33,11 @@ selection method.
 #
 
 import os
-import os.path
 import re
-import string
 
-import SCons.Action
 import SCons.Builder
 import SCons.Defaults
-import SCons.Environment
 import SCons.Scanner
-import SCons.Tool
 import SCons.Util
 
 FAUST = 'faust'
