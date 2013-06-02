@@ -11,13 +11,16 @@ INCLUDE_RE = re.compile(r'import\s*\(\s*"([^"]+)"\s*\)\s*;', re.M)
 
 def dsp_source_scanner(node, env, path):
     """Scan source files for imported files in `path'."""
+
     contents = node.get_contents()
     includes = INCLUDE_RE.findall(contents)
     path = [os.path.dirname(str(node))] + list(path)
+
     return filter(os.path.exists, env.Flatten(map(lambda f: map(lambda d: os.path.join(os.path.realpath(str(d)), f), path), includes)))
 
 def dsp_target_scanner(node, env, path):
     """Search for architecture file in `path'."""
+
     arch = env['FAUST_ARCHITECTURE'] + '.cpp'
     return filter(os.path.exists, map(lambda d: os.path.join(str(d), arch), path))
 
@@ -36,25 +39,34 @@ dsp = SCons.Builder.Builder(
         src_suffix = '.dsp',
         target_scanner = Scons.Scanner.Scanner(
             function = dsp_target_scanner,
-            path_function = SCons.Scanner.FindPathDirs('FAUST_PATH')))
+            path_function = SCons.Scanner.FindPathDirs('FAUST_PATH'))
+)
+
 xml = SCons.Builder.Builder(
         action = ['faust ${FAUST_FLAGS} -o /dev/null -xml $SOURCE', SCons.Defaults.Move('$TARGET', '${SOURCE}.xml')],
         suffix = '.dsp.xml',
-        src_suffix = '.dsp')
+        src_suffix = '.dsp'
+)
+
 svg = SCons.Builder.Builder(
         action = ['faust ${FAUST_FLAGS} -o /dev/null -svg $SOURCE', SCons.Defaults.Move('$TARGET', '${SOURCE}-svg')],
         suffix = '.dsp-svg',
         src_suffix = '.dsp',
         single_source = True,
         target_factory = SCons.Script.Dir,
-        target_scanner = SCons.Scanner.Scanner(function = svg_scanner))
+        target_scanner = SCons.Scanner.Scanner(function = svg_scanner)
+)
+
 sc  = SCons.Builder.Builder(
         action = '$FAUST2SC --lang=sclang --prefix="${FAUST2SC_PREFIX}" -o $TARGET $SOURCES',
         suffix = '.sc',
         src_suffix = '.dsp.xml',
-        multi = True)
+        multi = True
+)
+
 hs  = SCons.Builder.Builder(
         action = '$FAUST2SC --lang=haskell --prefix="${FAUST2SC_HASKELL_MODULE}" -o $TARGET $SOURCES',
         suffix = '.hs',
         src_suffix = '.dsp.xml',
-        multi = True)
+        multi = True
+)

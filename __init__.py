@@ -5,7 +5,6 @@ Tool for building faust dsp files.
 There normally shouldn't be any need to import this module directly.
 It will usually be imported through the generic SCons.Tool.Tool()
 selection method.
-
 """
 
 #
@@ -48,7 +47,7 @@ def generate(env):
     env['FAUST2SC']                 = 'faust2sc'
     env['FAUST2SC_PREFIX']          = ''
     env['FAUST2SC_HASKELL_MODULE']  = ''
-    
+
     env.Append(SCANNERS = [
         env.Scanner(function = dsp_source_scanner,
                     skeys = ['.dsp'],
