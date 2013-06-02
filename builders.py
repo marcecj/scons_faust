@@ -16,16 +16,20 @@ def dsp_source_scanner(node, env, path):
     includes = INCLUDE_RE.findall(contents)
     path = [os.path.dirname(str(node))] + list(path)
 
-    return filter(os.path.exists, env.Flatten(map(lambda f: map(lambda d: os.path.join(os.path.realpath(str(d)), f), path), includes)))
+    deps = filter(os.path.exists,
+        [os.path.join(os.path.realpath(str(d)), f) for d in path for f in includes]
+    )
+
+    return deps
 
 def dsp_target_scanner(node, env, path):
     """Search for architecture file in `path'."""
 
     arch = env['FAUST_ARCHITECTURE'] + '.cpp'
-    return filter(os.path.exists, map(lambda d: os.path.join(str(d), arch), path))
+    return filter(os.path.exists, [os.path.join(str(d), arch) for d in path])
 
 def svg_emitter(target, source, env):
-    target = target + map(lambda x: os.path.join(str(x), 'process.svg'), target)
+    target = target + [os.path.join(str(t), 'process.svg') for t in target]
     print map(str, target)
     return (target, source)
     #return (target + [os.path.join(str(target[0]), 'process.svg')], source)
