@@ -39,9 +39,8 @@ def _get_prog_path(env, key, name):
     # on windows faust might be named faust.exe
     prog_path = env.WhereIs(name) or env.WhereIs(name+'.exe')
 
-    if not prog_path:
-        raise SCons.Errors.EnvironmentError("faust not found")
-
+    # Explicitly do not raise an error here. If FAUST is not installed, then the
+    # build system using this tool should be able to deal with it.
     return prog_path
 
 def generate(env):
@@ -60,6 +59,7 @@ def generate(env):
     faust2sc    = _get_prog_path(env, 'FAUST2SC_FAUST2SC', 'faust2sc')
 
     try:
+        assert faust_faust != None, "faust not available"
         faust_proc = subp.Popen([faust_faust, '--version'], stdout=subp.PIPE)
         faust_ver = faust_proc.communicate()[0].splitlines()[0].split()[-1]
     except Exception as e:
@@ -67,6 +67,7 @@ def generate(env):
         faust_ver = ''
 
     try:
+        assert faust2sc != None, "faust2sc not available"
         faust2sc_proc = subp.Popen([faust2sc, '--version'], stdout=subp.PIPE)
         faust2sc_ver = faust2sc_proc.communicate()[0].split()[-1]
     except Exception as e:
