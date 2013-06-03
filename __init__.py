@@ -85,7 +85,7 @@ def generate(env):
             ['.', '/usr/local/lib/faust', '/usr/lib/faust']
         ),
 
-        # set faust2c defaults
+        # set faust2sc defaults
         FAUST2SC_FAUST2SC         = faust2sc,
         FAUST2SC_VERSION         = faust2sc_ver,
         FAUST2SC_PREFIX          = '',
