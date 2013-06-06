@@ -43,8 +43,6 @@ env = Environment(tools = ['default', 'faust'])
 
 or manually add it using `env.Tool()`.
 
-If any of `faust` or `faust2sc` are not found, an exception is raised.
-
 To compile a FAUST DSP, you use the `Faust()` builder:
 
 -----------------------------------
