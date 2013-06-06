@@ -69,7 +69,8 @@ dsp = SCons.Builder.Builder(
 ###################
 
 xml = SCons.Builder.Builder(
-    action = '$FAUST_FAUST ${FAUST_FLAGS} -o /dev/null -xml $SOURCE',
+    action = ['$FAUST_FAUST ${FAUST_FLAGS} -o /dev/null -xml $SOURCE',
+              SCons.Script.Move('$TARGET', '${SOURCE}.xml')],
     suffix = '.dsp.xml',
     src_suffix = '.dsp',
     single_source = True,
@@ -81,7 +82,8 @@ xml = SCons.Builder.Builder(
 ###################
 
 svg = SCons.Builder.Builder(
-    action = '$FAUST_FAUST ${FAUST_FLAGS} -o /dev/null -svg $SOURCE',
+    action = ['$FAUST_FAUST ${FAUST_FLAGS} -o /dev/null -svg $SOURCE',
+              SCons.Script.Move('$TARGET', '${SOURCE.base}-svg')],
     suffix = lambda env,srcs: "-svg",
     src_suffix = '.dsp',
     single_source = True,

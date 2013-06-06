@@ -14,7 +14,7 @@ def svg_builder(env, target, source, *args, **kwargs):
 
     # make sure to clean up the directory with the SVG files
     for t in r:
-        env.Clean(t, t.path)
+        env.Clean(t, t.abspath)
 
     return r
 
