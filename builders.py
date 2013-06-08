@@ -15,12 +15,10 @@ def dsp_source_scanner(node, env, path):
     """Scan source files for imported files in `path'."""
 
     contents = node.get_contents()
-    includes = INCLUDE_RE.findall(contents)
-    path = [os.path.dirname(str(node))] + list(path)
+    includes = [env.File(i) for i in INCLUDE_RE.findall(contents)]
+    path     = [node.Dir('.').path] + list(path)
 
-    deps = filter(os.path.exists,
-        [os.path.join(os.path.realpath(str(d)), f) for d in path for f in includes]
-    )
+    deps = [env.FindFile(str(f), path) for f in includes]
 
     return deps
 
@@ -28,7 +26,7 @@ def dsp_target_scanner(node, env, path):
     """Search for architecture file in `path'."""
 
     arch = env.subst('${FAUST_GET_ARCH}')
-    return filter(os.path.exists, [os.path.join(str(d), arch) for d in path])
+    return [env.FindFile(arch, path)]
 
 dsp_src_scanner = SCons.Scanner.Scanner(
     function = dsp_source_scanner,
