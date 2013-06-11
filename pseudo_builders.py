@@ -39,7 +39,7 @@ def doc_builder(env, target, source, *args, **kwargs):
     pdf_dir  = top_dir.Dir("pdf")
 
     process_svg = svg_dir0.File("process.svg")
-    process_pdf = env.File(process_svg.abspath[:-3]+"pdf")
+    process_pdf = svg_dir0.File("process.pdf")
     tex_path    = tex_dir.File(s_basename+".tex")
     pdf_path    = pdf_dir.File(s_basename+".pdf")
 

@@ -96,15 +96,9 @@ svg = SCons.Builder.Builder(
 def doc_emitter(target, source, env):
 
     orig_t = env.Dir(target[0])
-    s = os.path.basename(source[0].path)
-    svg_dir = orig_t.Dir("svg").Dir("svg-01")
-    tex_dir = orig_t.Dir("tex")
 
-    env.Ignore(target[0], orig_t.Dir("foo"))
-
-    target = [orig_t.Dir(d) for d in ("cpp", "src")],
-
-    env.Precious(target)
+    # only return directories with static content
+    target = [orig_t.Dir(d) for d in ("cpp", "src")]
 
     return target, source
 
