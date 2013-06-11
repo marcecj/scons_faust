@@ -32,7 +32,7 @@ def doc_builder(env, target, source, *args, **kwargs):
     s_basename = os.path.splitext(os.path.basename(source[0].path))[0]
 
     # get a bunch of paths
-    top_dir  = r[0].Dir('..')
+    top_dir  = env.Dir(r.pop(0).abspath)
     svg_dir  = top_dir.Dir("svg")
     svg_dir0 = svg_dir.Dir("svg-01")
     tex_dir  = top_dir.Dir("tex")

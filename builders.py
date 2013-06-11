@@ -95,10 +95,7 @@ svg = SCons.Builder.Builder(
 
 def doc_emitter(target, source, env):
 
-    orig_t = env.Dir(target[0])
-
-    # only return directories with static content
-    target = [orig_t.Dir(d) for d in ("cpp", "src")]
+    target = env.Dir(target[0])
 
     return target, source
 
@@ -113,8 +110,8 @@ doc_action_list = [
     '$FAUST_FAUST ${FAUST_FLAGS} -o /dev/null -mdoc $SOURCE',
     # NOTE: apparently the first Move() creates the directory without actually
     # executing the move, so a Mkdir() is needed first
-    SCons.Script.Mkdir('${TARGET.dir}'),
-    [SCons.Script.Move('${TARGET.dir}',
+    SCons.Script.Mkdir('${TARGET}'),
+    [SCons.Script.Move('${TARGET}',
                        '${SOURCE.base}-mdoc'+os.sep+subdir)
      for subdir in ("src", "cpp", "svg", "tex", "pdf")],
     SCons.Script.Delete('${SOURCE.base}-mdoc')
