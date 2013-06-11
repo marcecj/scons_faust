@@ -52,6 +52,7 @@ def generate(env):
     env.Append(BUILDERS = { 'Faust':        pseudo_builders.dsp_builder,
                             'FaustXML':     builders.xml,
                             'FaustSVG':     pseudo_builders.svg_builder,
+                            'SVG2PDF':      builders.svg2pdf,
                             'FaustMDoc':    pseudo_builders.doc_builder,
                             'FaustSC':      builders.sc,
                             'FaustHaskell': builders.hs })
