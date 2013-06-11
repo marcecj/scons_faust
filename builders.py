@@ -89,6 +89,53 @@ svg = SCons.Builder.Builder(
     target_factory = SCons.Script.Dir
 )
 
+#############################
+# the documentation builder #
+#############################
+
+def doc_emitter(target, source, env):
+
+    orig_t = env.Dir(target[0])
+    s = os.path.basename(source[0].path)
+    svg_dir = orig_t.Dir("svg").Dir("svg-01")
+    tex_dir = orig_t.Dir("tex")
+
+    env.Ignore(target[0], orig_t.Dir("foo"))
+
+    target = [orig_t.Dir(d) for d in ("cpp", "src")],
+
+    env.Precious(target)
+
+    return target, source
+
+cairosvg = SCons.Builder.Builder(
+    action = 'cairosvg --format=pdf -o $TARGET $SOURCE',
+    suffix = '.pdf',
+    src_suffix = '.svg',
+    single_source = True
+)
+
+doc_action_list = [
+    '$FAUST_FAUST ${FAUST_FLAGS} -o /dev/null -mdoc $SOURCE',
+    # NOTE: apparently the first Move() creates the directory without actually
+    # executing the move, so a Mkdir() is needed first
+    SCons.Script.Mkdir('${TARGET.dir}'),
+    [SCons.Script.Move('${TARGET.dir}',
+                       '${SOURCE.base}-mdoc'+os.sep+subdir)
+     for subdir in ("src", "cpp", "svg", "tex", "pdf")],
+    SCons.Script.Delete('${SOURCE.base}-mdoc')
+]
+
+doc = SCons.Builder.Builder(
+    action = SCons.Script.Flatten(doc_action_list),
+    suffix = lambda env,srcs: "-mdoc",
+    src_suffix = '.dsp',
+    single_source = True,
+    source_scanner = dsp_src_scanner,
+    target_factory = SCons.Script.Dir,
+    emitter = doc_emitter
+)
+
 ##############################
 # the supercollider builders #
 ##############################

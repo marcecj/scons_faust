@@ -18,6 +18,52 @@ def svg_builder(env, target, source, *args, **kwargs):
 
     return r
 
+def doc_builder(env, target, source, *args, **kwargs):
+    """
+    A pseudo-builder for generating documentation via faust -mdoc.
+
+    In addition to what the doc builder does, this pseudo-builder marks the mdoc
+    directory for cleaning.
+    """
+
+    source = [env.File(s) for s in source]
+    r = builders.doc(env, target, source, *args, **kwargs)
+
+    s_basename = os.path.splitext(os.path.basename(source[0].path))[0]
+
+    # get a bunch of paths
+    top_dir  = r[0].Dir('..')
+    svg_dir  = top_dir.Dir("svg")
+    svg_dir0 = svg_dir.Dir("svg-01")
+    tex_dir  = top_dir.Dir("tex")
+    pdf_dir  = top_dir.Dir("pdf")
+
+    process_svg = svg_dir0.File("process.svg")
+    process_pdf = env.File(process_svg.abspath[:-3]+"pdf")
+    tex_path    = tex_dir.File(s_basename+".tex")
+    pdf_path    = pdf_dir.File(s_basename+".pdf")
+
+    # compile the LaTeX sources to PDF
+    process_pdf = builders.cairosvg(env, process_pdf.abspath, process_svg.abspath)
+    mdoc_pdf    = env.PDF(pdf_path, tex_path)
+
+    # the svg and pdf subdirectories change because of process_pdf and
+    # mdoc_pdf, so make sure the *-mdoc directory ignores them
+    env.Ignore(top_dir,  [svg_dir, tex_dir, pdf_dir])
+    env.Ignore(svg_dir0, process_pdf)
+    env.Ignore(pdf_dir,  mdoc_pdf)
+
+    # set the dependencies straight
+    env.Depends([process_svg, tex_path], top_dir)
+    env.Depends(mdoc_pdf, process_pdf)
+
+    r.extend([mdoc_pdf, process_pdf])
+
+    # make sure to clean up the documentation directory
+    env.Clean(r, top_dir.abspath)
+
+    return r
+
 def dsp_builder(env, target, source, *args, **kwargs):
     """
     A pseudo builder for compiling FAUST DSPs.
