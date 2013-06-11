@@ -102,7 +102,7 @@ def doc_emitter(target, source, env):
 
     return target, source
 
-cairosvg = SCons.Builder.Builder(
+svg2pdf = SCons.Builder.Builder(
     action = 'cairosvg --format=pdf -o $TARGET $SOURCE',
     suffix = '.pdf',
     src_suffix = '.svg',
