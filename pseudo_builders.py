@@ -44,7 +44,7 @@ def doc_builder(env, target, source, *args, **kwargs):
     pdf_path    = pdf_dir.File(s_basename+".pdf")
 
     # compile the LaTeX sources to PDF
-    process_pdf = env.SVG2PDF(process_pdf.abspath, process_svg)
+    process_pdf = env.SVG2PDF(process_pdf, process_svg)
     mdoc_pdf    = env.PDF(pdf_path, tex_path)
 
     # the svg and pdf subdirectories change because of process_pdf and
