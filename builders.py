@@ -99,8 +99,16 @@ def doc_emitter(target, source, env):
 
     return target, source
 
+def cairosvg_action_fun(source, target, env):
+
+    import cairosvg
+    cairosvg.svg2pdf(url=source[0].abspath,
+                     write_to=target[0].abspath)
+
+# cairosvg_action = 'cairosvg --format=pdf -o $TARGET $SOURCE',
+cairosvg_action = cairosvg_action_fun
 svg2pdf = SCons.Builder.Builder(
-    action = 'cairosvg --format=pdf -o $TARGET $SOURCE',
+    action = cairosvg_action,
     suffix = '.pdf',
     src_suffix = '.svg',
     single_source = True
